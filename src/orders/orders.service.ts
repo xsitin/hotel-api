@@ -20,7 +20,7 @@ export class OrdersService {
   async addOrder(order: Order): Promise<Order> {
     order.vip = await this.isVip(order);
     await this.ordersRepository.manager.transaction(
-      'READ COMMITTED',
+      'REPEATABLE READ',
       async (transactionManager) => {
         const rep = await transactionManager.getRepository(Order);
         const intersection = await rep.findBy([
